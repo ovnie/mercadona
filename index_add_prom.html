@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Créer un produit et le mettre en promotion</title>
+  <style>
+    /* CSS pour la mise en page */
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 5px;
+    }
+
+    .form-group button {
+      padding: 5px 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    .success-message {
+      margin-top: 10px;
+      color: green;
+      font-weight: bold;
+    }
+
+    .error-message {
+      margin-top: 10px;
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Créer un produit et le mettre en promotion</h2>
+    <div id="message" class="success-message"></div>
+    <div id="error" class="error-message"></div>
+    <form id="productForm">
+      <div class="form-group">
+        <label for="productName">Nom du produit</label>
+        <input type="text" id="productName" name="productName" required>
+      </div>
+      <div class="form-group">
+        <label for="productPrice">Prix du produit</label>
+        <input type="number" id="productPrice" name="productPrice" required step="0.01">
+      </div>
+      <div class="form-group">
+        <label for="promotionPercentage">Pourcentage de promotion</label>
+        <input type="number" id="promotionPercentage" name="promotionPercentage" required step="0.01">
+      </div>
+      <div class="form-group">
+        <button type="submit">Créer le produit et le mettre en promotion</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('productForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      var productName = document.getElementById('productName').value;
+      var productPrice = parseFloat(document.getElementById('productPrice').value);
+      var promotionPercentage = parseFloat(document.getElementById('promotionPercentage').value);
+
+      // Envoyer la requête POST pour créer le produit et le mettre en promotion
+      fetch('http://192.168.1.28:8080/api/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: productName,
+          price: productPrice
+        })
+      })
+      .then(function(response) {
+        if (response.ok) {
+          // Le produit a été créé avec succès
+          return response.json();
+        } else {
+          throw new Error('Erreur lors de la création du produit');
+        }
+      })
+      .then(function(product) {
+        // Récupérer l'ID du produit créé
+        var productId = product.id;
+
+        // Envoyer la requête POST pour mettre le produit en promotion
+        fetch('http://192.168.1.28:8080/api/promotions/' + productId + '?percentage=' + promotionPercentage, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(function(response) {
+          if (response.ok) {
+            // Le produit a été mis en promotion avec succès
+            document.getElementById('message').textContent = 'Produit créé et mis en promotion avec succès.';
+            document.getElementById('error').textContent = '';
+          } else {
+            throw new Error('Erreur lors de la mise en promotion du produit');
+          }
+        })
+        .catch(function(error) {
+          // Gérer les erreurs
+          document.getElementById('message').textContent = '';
+          document.getElementById('error').textContent = error.message;
+        });
+      })
+      .catch(function(error) {
+        // Gérer les erreurs
+        document.getElementById('message').textContent = '';
+        document.getElementById('error').textContent = error.message;
+      });
+    });
+  </script>
+</body>
+</html>

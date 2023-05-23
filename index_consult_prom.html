@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Promotions</title>
+  <style>
+    .promotion-item {
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .label {
+      font-weight: bold;
+    }
+
+    .price {
+      margin-top: 5px;
+    }
+
+    .description {
+      margin-top: 5px;
+    }
+
+    .category {
+      margin-top: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Promotions</h1>
+
+  <div id="promotionsList"></div>
+
+  <script>
+    // Fonction pour effectuer une requête GET pour récupérer les promotions
+    function getPromotions() {
+      fetch('http://192.168.1.28:8080/api/promotions')
+        .then(response => response.json())
+        .then(promotions => displayPromotions(promotions))
+        .catch(error => console.error('Erreur:', error));
+    }
+
+    // Fonction pour afficher les promotions
+    function displayPromotions(promotions) {
+      var promotionsList = document.getElementById('promotionsList');
+
+      // Vider la liste des promotions
+      promotionsList.innerHTML = '';
+
+      // Parcourir les promotions et les ajouter à la liste
+      promotions.forEach(function (promotion) {
+        var promotionItem = document.createElement('div');
+        promotionItem.classList.add('promotion-item');
+
+        var label = document.createElement('div');
+        label.classList.add('label');
+        label.textContent = promotion.productName;
+
+        var price = document.createElement('div');
+        price.classList.add('price');
+        price.textContent = 'Promotion Price: ' + promotion.promotionPrice.toFixed(2);
+
+        var percentage = document.createElement('div');
+        percentage.textContent = 'Percentage: ' + promotion.percentage;
+
+        promotionItem.appendChild(label);
+        promotionItem.appendChild(price);
+        promotionItem.appendChild(percentage);
+
+        promotionsList.appendChild(promotionItem);
+      });
+    }
+
+    // Appeler la fonction pour récupérer les promotions au chargement de la page
+    getPromotions();
+  </script>
+</body>
+
+</html>
