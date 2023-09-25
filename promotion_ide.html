@@ -29,7 +29,7 @@
     <script>
     document.addEventListener("DOMContentLoaded", function () {
 	    // Remplit la liste des produits depuis l'API
-	    fetch("http://92.222.181.53:8080/studi-0.0.2-SNAPSHOT/api/products")
+	    fetch("http://92.222.181.53:8080/studi-0.0.4-SNAPSHOT/api/products")
 	        .then(response => response.json())
 	        .then(products => {
 	            const productIdSelect = document.getElementById("productId");
@@ -61,7 +61,7 @@
 	        };
 	
 	        // Envoie les données de la promotion au serveur via une requête AJAX
-	        fetch("http://92.222.181.53:8080/studi-0.0.2-SNAPSHOT/api/products/promotion", {
+	        fetch("http://92.222.181.53:8080/studi-0.0.4-SNAPSHOT/api/products/promotion", {
 	            method: "POST",
 	            headers: {
 	                "Content-Type": "application/json"
