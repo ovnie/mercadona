@@ -1,21 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Liste des Produits</title>
+    <meta charset="UTF-8"> <!-- UTF-8 pour l'encodage Unicode, adapté à de nombreuses langues -->
+		<meta http-equiv="Content-Language" content="fr">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercadona - Accueil</title>
+	<meta name="description" content="Mercadona - Parce que nous proposons les meilleurs produits et promotions">
+	<meta name="keywords" content="produits, promotions, prix">
+	<meta name="author" content="Josselin Fatah-Roux">
+	<meta name="robots" content="index,follow">
+    <link rel="stylesheet" type="text/css" href="mercadona.css">
 </head>
 <body>
-    <h1>Liste des Produits</h1>
+    <header>
+        <h1>Mercadona</h1>
+        <!-- Ajoutez ici votre bannière ou tout autre contenu de l'en-tête -->
+        <nav>
+            <ul class="menu">
+                <li><a href="http://localhost:8080/catalog.html">Accueil</a></li>
+                <li><a href="http://localhost:8080/admin/product.html">Produits</a></li>
+				<li><a href="http://localhost:8080/admin/promotion.html">Promotions</a></li>
+                <li><a href="mailto:vufic@outlook.com">Contact</a></li>
+                <!-- Ajoutez d'autres éléments du menu ici -->
+            </ul>
+        </nav>
+    </header>
 
-    <label for="categoryFilter">Filtrer par Catégorie :</label>
-    <select id="categoryFilter">
-        <option value="">Toutes les catégories</option>
-        <!-- Les options de catégorie seront générées dynamiquement via JavaScript -->
-    </select>
+    <article>
+        <h2>Liste des Produits</h2>
 
-    <button id="filterButton">Filtrer</button>
+        <label for="categoryFilter">Filtrer par Catégorie :</label>
+        <select id="categoryFilter">
+            <option value="">Toutes les catégories</option>
+            <!-- Les options de catégorie seront générées dynamiquement via JavaScript -->
+        </select>
 
-    <ul id="productList"></ul>
+        <button id="filterButton">Filtrer</button>
 
-	<script src="script_catalog.js"></script>
+        <ul id="productList"></ul>
+    </article>
+
+    <footer>
+        <!-- Ajoutez ici le contenu de votre pied de page (footer) -->
+        <p>&copy; 2023 Mercadona. Tous droits réservés.</p>
+    </footer>
+
+    <script src="script_catalog.js"></script>
 </body>
 </html>

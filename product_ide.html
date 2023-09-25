@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ajouter un produit</title>
+</head>
+<body>
+    <h1>Ajouter un produit</h1>
+    <form id="productForm">
+        <label for="label">Libellé :</label>
+        <input type="text" id="label" name="label" required><br><br>
+
+        <label for="description">Description :</label>
+        <textarea id="description" name="description" required></textarea><br><br>
+
+        <label for="price">Prix :</label>
+        <input type="number" id="price" name="price" step="0.01" required><br><br>
+
+        <label for="image">Image :</label>
+        <input type="text" id="image" name="image" required><br><br>
+
+        <label for="category">Catégorie :</label>
+        <input type="text" id="category" name="category" required><br><br>
+		
+		<label for="promotionStartDate" style="display: none;">Date de début de la promotion :</label>
+		<input type="date" id="promotionStartDate" name="promotionStartDate" style="display: none;"><!--<br><br>-->
+
+		<label for="promotionEndDate" style="display: none;">Date de fin de la promotion :</label>
+		<input type="date" id="promotionEndDate" name="promotionEndDate" style="display: none;"><!--<br><br>-->
+
+		<label for="promotionDiscount" style="display: none;">Pourcentage de remise :</label>
+		<input type="number" id="promotionDiscount" name="promotionDiscount" step="0.01" style="display: none;"><!--<br><br>-->
+
+        <button type="submit">Ajouter</button>
+    </form>
+
+    <div id="message"></div>
+
+    <script>
+    document.getElementById("productForm").addEventListener("submit", function (e) {
+	    e.preventDefault();
+	
+	    const label = document.getElementById("label").value;
+	    const description = document.getElementById("description").value;
+	    const price = parseFloat(document.getElementById("price").value);
+	    const image = document.getElementById("image").value;
+	    const category = document.getElementById("category").value;
+	    const promotionStartDateInput = document.getElementById("promotionStartDate");
+	    const promotionEndDateInput = document.getElementById("promotionEndDate");
+	    const promotionDiscountInput = document.getElementById("promotionDiscount");
+	
+	    const defaultStartDate = "2022-01-01"; // Date par défaut au format yyyy-mm-dd
+	    const defaultEndDate = "2022-01-01";   // Date par défaut au format yyyy-mm-dd
+	    const defaultDiscount = 0.0;           // Valeur de réduction par défaut
+	
+	    const promotionStartDate = promotionStartDateInput.value || defaultStartDate;
+	    const promotionEndDate = promotionEndDateInput.value || defaultEndDate;
+	    const promotionDiscount = parseFloat(promotionDiscountInput.value) || defaultDiscount;
+	
+	    const product = {
+	        label: label,
+	        description: description,
+	        price: price,
+	        image: image,
+	        category: category,
+	        promotionStartDate: promotionStartDate,
+	        promotionEndDate: promotionEndDate,
+	        promotionDiscount: promotionDiscount
+	    };
+	
+	    // Envoie les données du produit au serveur via une requête AJAX
+	    fetch("http://localhost:8080/api/products", {
+	        method: "POST",
+	        headers: {
+	            "Content-Type": "application/json"
+	        },
+	        body: JSON.stringify(product)
+	    })
+	    .then(response => response.json())
+	    .then(data => {
+	        document.getElementById("message").textContent = "Produit ajouté avec succès.";
+	        // Réinitialise les champs du formulaire
+	        document.getElementById("label").value = "";
+	        document.getElementById("description").value = "";
+	        document.getElementById("price").value = "";
+	        document.getElementById("image").value = "";
+	        document.getElementById("category").value = "";
+	        document.getElementById("promotionStartDate").value = "";
+	        document.getElementById("promotionEndDate").value = "";
+	        document.getElementById("promotionDiscount").value = "";
+	    })
+	    .catch(error => {
+	        console.error("Erreur lors de l'ajout du produit :", error);
+	        document.getElementById("message").textContent = "Erreur lors de l'ajout du produit.";
+	    });
+	})
+    </script>
+</body>
+</html>

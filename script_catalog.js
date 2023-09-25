@@ -47,22 +47,33 @@ function filterProducts() {
                     const productDescription = document.createElement("span");
                     productDescription.textContent = `Description : ${product.description} - `;
                     productInfo.appendChild(productDescription);
-
-                    const productPrice = document.createElement("span");
+					
+					const productPrice = document.createElement("span");
                     productPrice.textContent = `Prix : ${product.price} €`;
-					
-					const productImage = document.createElement("span");
+
+                    const productImage = document.createElement("span");
                     productImage.textContent = `Image : ${product.image} - `;
-					productInfo.appendChild(productImage);
+                    productInfo.appendChild(productImage);
+
+                    // Vérifiez si les dates de promotion sont égales à "2022,1,1"
+                    const promotionStartDateComponents = String(product.promotionStartDate).split(',');
+                    const promotionEndDateComponents = String(product.promotionEndDate).split(',');
+
+                    if (promotionStartDateComponents[0] === "2022" && promotionStartDateComponents[1] === "1" && promotionStartDateComponents[2] === "1" && promotionEndDateComponents[0] === "2022" && promotionEndDateComponents[1] === "1" && promotionEndDateComponents[2] === "1"){
+                        const naText = document.createElement("span");
+                        naText.textContent = "Date début promotion : N/A - Date fin promotion : N/A - ";
+                        productInfo.appendChild(naText);
+                    } 
+					else {
+                        const productPromotionStartDate = document.createElement("span");
+                        productPromotionStartDate.textContent = `Date début promotion : ${product.promotionStartDate} - `;
+                        productInfo.appendChild(productPromotionStartDate);
+
+                        const productPromotionEndDate = document.createElement("span");
+                        productPromotionEndDate.textContent = `Date fin promotion : ${product.promotionEndDate} - `;
+                        productInfo.appendChild(productPromotionEndDate);
+                    }
 					
-					const productPromotionStartDate = document.createElement("span");
-                    productPromotionStartDate.textContent = `Date début promotion : ${product.promotionStartDate} - `;
-					productInfo.appendChild(productPromotionStartDate);
-					
-					const productPromotionEndDate = document.createElement("span");
-                    productPromotionEndDate.textContent = `Date fin promotion : ${product.promotionEndDate} - `;
-					productInfo.appendChild(productPromotionEndDate);
-                    
 					const productPromotionDiscount = document.createElement("span");
                     productPromotionDiscount.textContent = `Remise : ${product.promotionDiscount} - `;
 					productInfo.appendChild(productPromotionDiscount);
@@ -73,7 +84,7 @@ function filterProducts() {
                     }
 
                     productInfo.appendChild(productPrice);
-
+					
                     listItem.appendChild(productInfo);
                     productList.appendChild(listItem);
                 }

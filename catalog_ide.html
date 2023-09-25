@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"> <!-- UTF-8 pour l'encodage Unicode, adapté à de nombreuses langues -->
+	<meta http-equiv="Content-Language" content="fr">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercadona - Accueil</title>
+	<meta name="description" content="Mercadona - Parce que nous proposons les meilleurs produits et promotions">
+	<meta name="keywords" content="produits, promotions, prix">
+	<meta name="author" content="Josselin Fatah-Roux">
+	<meta name="robots" content="index,follow">
+    <style>
+		/* Styles généraux */
+		body {
+		    font-family: Arial, sans-serif;
+		    margin: 0;
+		    padding: 0;
+		    text-align: center; /* Centrer le contenu horizontalement */
+		    display: flex;
+		    flex-direction: column;
+		    min-height: 100vh; /* La hauteur minimale de la page sera égale à 100% de la hauteur de la fenêtre du navigateur */
+		}
+		
+		/* En-tête */
+		header {
+		    background-color: #333;
+		    color: #fff;
+		    padding: 10px 0;
+		}
+		
+		header h1 {
+		    margin: 0;
+		}
+		
+		nav {
+		    margin-top: 10px;
+		}
+		
+		.menu {
+		    list-style: none;
+		    padding: 0;
+		}
+		
+		.menu li {
+		    display: inline; /* Afficher les éléments du menu horizontalement */
+		    margin-right: 20px;
+		}
+		
+		.menu li:last-child {
+		    margin-right: 0; /* Supprimer la marge du dernier élément du menu */
+		}
+		
+		.menu a {
+		    text-decoration: none;
+		    color: #fff;
+		    font-weight: bold;
+		}
+		
+		/* Contenu principal */
+		article {
+		    flex: 1; /* Permet au contenu de prendre l'espace restant verticalement */
+		    max-width: 1200px; /* Largeur maximale du contenu */
+		    margin: 0 auto; /* Centrer le contenu horizontalement */
+		    padding: 20px;
+		}
+		
+		/* Pied de page */
+		footer {
+		    background-color: #333;
+		    color: #fff;
+		    padding: 10px 0;
+		}
+		
+		.discounted-price {
+		    color: red;
+		}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Mercadona</h1>
+        <!-- Ajoutez ici votre bannière ou tout autre contenu de l'en-tête -->
+        <nav>
+            <ul class="menu">
+                <li><a href="http://localhost:8080/catalog.html">Accueil</a></li>
+                <li><a href="http://localhost:8080/admin/product.html">Produits</a></li>
+				<li><a href="http://localhost:8080/admin/promotion.html">Promotions</a></li>
+                <li><a href="mailto:vufic@outlook.com">Contact</a></li>
+                <!-- Ajoutez d'autres éléments du menu ici -->
+            </ul>
+        </nav>
+    </header>
+
+    <article>
+        <h2>Liste des Produits</h2>
+
+        <label for="categoryFilter">Filtrer par Catégorie :</label>
+        <select id="categoryFilter">
+            <option value="">Toutes les catégories</option>
+            <!-- Les options de catégorie seront générées dynamiquement via JavaScript -->
+        </select>
+
+        <button id="filterButton">Filtrer</button>
+
+        <ul id="productList"></ul>
+    </article>
+
+    <footer>
+        <!-- Ajoutez ici le contenu de votre pied de page (footer) -->
+        <p>&copy; 2023 Mercadona. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+    // Fonction pour charger les catégories uniques depuis l'API
+	function loadCategories() {
+		fetch("http://localhost:8080/api/products")
+			.then(response => response.json())
+			.then(data => {
+				const categories = new Set();
+				data.forEach(product => {
+					categories.add(product.category);
+				});
+	
+				const categoryFilter = document.getElementById("categoryFilter");
+				categories.forEach(category => {
+					const option = document.createElement("option");
+					option.value = category;
+					option.textContent = category;
+					categoryFilter.appendChild(option);
+				});
+	
+				// Affiche tous les produits par défaut
+				filterProducts();
+			})
+			.catch(error => {
+				console.error("Erreur lors du chargement des catégories :", error);
+			});
+	}
+	
+	// Fonction pour afficher les produits en fonction de la catégorie sélectionnée
+	function filterProducts() {
+	    const selectedCategory = document.getElementById("categoryFilter").value;
+	    const productList = document.getElementById("productList");
+	    productList.innerHTML = ""; // Efface la liste précédente
+	
+	    fetch("http://localhost:8080/api/products")
+	        .then(response => response.json())
+	        .then(data => {
+	            data.forEach(product => {
+	                if (selectedCategory === "" || product.category === selectedCategory) {
+	                    const listItem = document.createElement("li");
+	                    const productInfo = document.createElement("div");
+	                    productInfo.classList.add("product-info");
+	
+	                    // Ajoutez toutes les informations du produit
+	                    const productName = document.createElement("span");
+	                    productName.textContent = `Nom : ${product.label} - `;
+	                    productInfo.appendChild(productName);
+	
+	                    const productDescription = document.createElement("span");
+	                    productDescription.textContent = `Description : ${product.description} - `;
+	                    productInfo.appendChild(productDescription);
+						
+						const productPrice = document.createElement("span");
+	                    productPrice.textContent = `Prix : ${product.price} €`;
+	
+	                    const productImage = document.createElement("span");
+	                    productImage.textContent = `Image : ${product.image} - `;
+	                    productInfo.appendChild(productImage);
+	
+	                    // Vérifiez si les dates de promotion sont égales à "2022,1,1"
+	                    const promotionStartDateComponents = String(product.promotionStartDate).split(',');
+	                    const promotionEndDateComponents = String(product.promotionEndDate).split(',');
+	
+	                    if (promotionStartDateComponents[0] === "2022" && promotionStartDateComponents[1] === "1" && promotionStartDateComponents[2] === "1" && promotionEndDateComponents[0] === "2022" && promotionEndDateComponents[1] === "1" && promotionEndDateComponents[2] === "1"){
+	                        const naText = document.createElement("span");
+	                        naText.textContent = "Date début promotion : N/A - Date fin promotion : N/A - ";
+	                        productInfo.appendChild(naText);
+	                    } 
+						else {
+	                        const productPromotionStartDate = document.createElement("span");
+	                        productPromotionStartDate.textContent = `Date début promotion : ${product.promotionStartDate} - `;
+	                        productInfo.appendChild(productPromotionStartDate);
+	
+	                        const productPromotionEndDate = document.createElement("span");
+	                        productPromotionEndDate.textContent = `Date fin promotion : ${product.promotionEndDate} - `;
+	                        productInfo.appendChild(productPromotionEndDate);
+	                    }
+						
+						const productPromotionDiscount = document.createElement("span");
+	                    productPromotionDiscount.textContent = `Remise : ${product.promotionDiscount} - `;
+						productInfo.appendChild(productPromotionDiscount);
+						
+	                    // Vérifiez si une promotion est appliquée
+	                    if (product.promotionDiscount > 0) {
+	                        productPrice.classList.add("discounted-price");
+	                    }
+	
+	                    productInfo.appendChild(productPrice);
+						
+	                    listItem.appendChild(productInfo);
+	                    productList.appendChild(listItem);
+	                }
+	            });
+	        })
+	        .catch(error => {
+	            console.error("Erreur lors du chargement des produits :", error);
+	        });
+	}
+	
+	// Écouteur d'événement pour le bouton de filtrage
+	document.getElementById("filterButton").addEventListener("click", filterProducts);
+	
+	// Chargement initial des catégories
+	loadCategories();
+    </script>
+</body>
+</html>

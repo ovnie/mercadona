@@ -1,0 +1,64 @@
+/* Styles généraux */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center; /* Centrer le contenu horizontalement */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* La hauteur minimale de la page sera égale à 100% de la hauteur de la fenêtre du navigateur */
+}
+
+/* En-tête */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+}
+
+header h1 {
+    margin: 0;
+}
+
+nav {
+    margin-top: 10px;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+}
+
+.menu li {
+    display: inline; /* Afficher les éléments du menu horizontalement */
+    margin-right: 20px;
+}
+
+.menu li:last-child {
+    margin-right: 0; /* Supprimer la marge du dernier élément du menu */
+}
+
+.menu a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Contenu principal */
+article {
+    flex: 1; /* Permet au contenu de prendre l'espace restant verticalement */
+    max-width: 1200px; /* Largeur maximale du contenu */
+    margin: 0 auto; /* Centrer le contenu horizontalement */
+    padding: 20px;
+}
+
+/* Pied de page */
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+}
+
+.discounted-price {
+    color: red;
+}
