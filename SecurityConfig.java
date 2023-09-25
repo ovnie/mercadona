@@ -10,6 +10,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -44,8 +45,8 @@ public class SecurityConfig {
         	.and()
             .authorizeRequests(authorizeRequests ->
                 authorizeRequests
-                    .requestMatchers("/admin/**").hasRole("ADMIN")
-                    .requestMatchers("/api/products").permitAll() // Autorisez l'accès à l'API sans authentification
+                    .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasRole("ADMIN")
+                    .requestMatchers(new AntPathRequestMatcher("/api/products")).permitAll() // Autorisez l'accès à l'API sans authentification
                     .anyRequest().permitAll()
             )
             .formLogin() // Supprimez .loginPage("/login")
